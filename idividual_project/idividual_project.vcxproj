@@ -123,11 +123,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="data.h" />
+    <ClInclude Include="types.h" />
     <ClInclude Include="menu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="clients.csv" />
+    <None Include="instructors.csv" />
+    <None Include="training_sessions.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

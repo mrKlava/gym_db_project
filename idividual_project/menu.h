@@ -6,4 +6,6 @@ void menu_istructors();
 void menu_clients();
 void menu_trainig_sessions();
 
+void print_table_instructors();
+
 #endif
