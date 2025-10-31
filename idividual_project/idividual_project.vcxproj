@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="clients.csv" />
+    <None Include="config.dat" />
     <None Include="instructors.csv" />
     <None Include="training_sessions.csv" />
   </ItemGroup>

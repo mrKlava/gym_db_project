@@ -58,8 +58,9 @@ typedef struct TrainingSession {
 	DateTime end;
 } TrainingSession;
 
-
 extern Instructor instructors[];
 extern int instructor_count;
+extern int instructor_last_id;
+extern int next_id_instructor;
 
 #endif
