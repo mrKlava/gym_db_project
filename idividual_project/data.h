@@ -7,9 +7,11 @@
 bool load_data();
 bool load_ids();
 
+/* Instructors */
 bool load_instructors();
 bool add_instructor(const Instructor& ins);
 int next_instructor_id();
 bool delete_instructor_by_id(int target_id);
+void sort_instructors_by_id(bool asc);
 
 #endif

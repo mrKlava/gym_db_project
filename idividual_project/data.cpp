@@ -7,6 +7,8 @@
 #include "types.h"
 #include "data.h"
 
+using namespace std;
+
 /* Instructors */
 Instructor instructors[MAX_RECORDS];
 int instructor_count = 0;
@@ -18,7 +20,6 @@ int instructor_last_id = 0;
 /* Sessions */
 // TODO: implement training sessions data storage
 
-using namespace std;
 
 bool load_data() {
 	load_ids();
@@ -88,10 +89,10 @@ bool load_instructors() {
 
 		// handle gender
 		if (!getline(ss, token, ',')) continue;
-		if (token == "M") {
+		if (token == "1") {
 			ins.gender = M;
 		}
-		else if (token == "F") {
+		else if (token == "2") {
 			ins.gender = F;
 		}
 
@@ -188,7 +189,7 @@ bool delete_instructor_by_id(int target_id) {
 	bool deleted = false;
 
 	ifstream in(FILE_INSTRUCTORS);
-	ofstream temp("temp.csv");
+	ofstream temp(FILE_TEMP);
 	if (!in.is_open() || !temp.is_open()) {
 		cerr << "Error: cannot open file(s)." << endl;
 		return deleted;
@@ -219,15 +220,36 @@ bool delete_instructor_by_id(int target_id) {
 
 	// replace original file
 	remove(FILE_INSTRUCTORS);
-	rename("temp.csv", FILE_INSTRUCTORS);
+	rename(FILE_TEMP, FILE_INSTRUCTORS);
 
 	// clear or remove temp file (to ensure no leftovers)
-	remove("temp.csv");
+	remove(FILE_TEMP);
 
 	if (deleted)
 		cout << "Instructor with ID " << target_id << " deleted successfully.\n";
 	else
 		cout << "Instructor with ID " << target_id << " not found.\n";
 
+	// reload data
+	load_instructors();
+
 	return deleted;
+}
+
+/* SORT UTILS */
+
+void sort_instructors_by_id(bool asc = true) {
+	for (int i = 0; i < instructor_count - 1; i++) {
+		for (int j = 0; j < instructor_count - i - 1; j++) {
+			bool condition = asc
+				? (instructors[j].id > instructors[j + 1].id)
+				: (instructors[j].id < instructors[j + 1].id);
+
+			if (condition) {
+				Instructor temp = instructors[j];
+				instructors[j] = instructors[j + 1];
+				instructors[j + 1] = temp;
+			}
+		}
+	}
 }

@@ -2,29 +2,29 @@
 #include <cstring>  // for strcpy, strlen
 #include <iostream>
 #include <limits>   // for numeric_limits
+#include <string>
 
-#include "menu.h"
 #include "data.h"
 #include "types.h"
-#include <string>
+
+#include "menu.h"
+#include "menu_istructors.h"
 
 using namespace std;
 
+const string MENU_OPTIONS[] = {
+	"Menu Options",
+	"Instructors",
+	"Clients",
+	"Training Sessions",
+	"Exit"
+};
+
 void menu() {
 	while (true) {
-		cout << endl;
-		cout << "=============================" << endl;
-		cout << "Menu Options:" << endl;
-		cout << "-----------------------------" << endl;
-		cout << "1. Instructors" << endl;
-		cout << "2. Clients" << endl;
-		cout << "3. Training Sessions" << endl;
-		cout << "4. Exit" << endl;
-		cout << "=============================" << endl;
-		cout << "Please enter your choice: ";
+		print_menu_options(MENU_OPTIONS);
 
-		int choice;
-		cin >> choice;
+		int choice = get_input_positive_int("Please enter your choice: ");
 
 		switch (choice) {
 		case 1:
@@ -46,48 +46,6 @@ void menu() {
 }
 
 /* MENU UTILS */
-
-void menu_istructors() {
-	while (true) {
-		cout << endl;
-		cout << "=============================" << endl;
-		cout << "Instructors Menu:" << endl;
-		cout << "-----------------------------" << endl;
-		cout << "1. View All" << endl;
-		cout << "2. Add New" << endl;
-		cout << "3. Delete" << endl;
-		cout << "4. Back to Main Menu" << endl;
-		cout << "=============================" << endl;
-		cout << "Please enter your choice: ";
-
-		int choice;
-		cin >> choice;
-
-		switch (choice) {
-		case 1:
-			print_table_instructors();
-			break;
-		case 2:
-		{
-			Instructor ins = get_instructor();
-			bool is_added = add_instructor(ins);
-
-			cout << is_added << endl;
-
-			break;
-		}
-		case 3:
-			delete_instructor();
-			break;
-		case 4:
-			return;
-		default:
-			cout << "Invalid choice. Please try again." << endl;
-		}
-	}
-
-	cout << endl;
-}
 
 void menu_clients() {
 	while (true) {
@@ -159,51 +117,6 @@ void menu_trainig_sessions() {
 	}
 }
 
-/* PRINT UTILS */
-
-void print_table_instructors() {
-	;
-	printf("\n========================================================================================\n");
-	printf("Instructors (count = %d)\n", instructor_count);
-	printf("----------------------------------------------------------------------------------------\n");
-	printf("%-5s | %-32s | %-32s | %-6s\n", "ID", "Name", "Surname", "Gender");
-	printf("----------------------------------------------------------------------------------------\n");
-	for (int i = 0; i < instructor_count; i++)
-	{
-		Instructor& ins = instructors[i];
-
-		const char* gender = (ins.gender == 1 ? "M" : (ins.gender == 2 ? "F" : "O"));
-
-		static char buf[80];
-		buf[0] = '\0';
-		printf("%-5d | %-32s | %-32s | %-6s\n", ins.id, ins.name, ins.surname, gender);
-	}
-	printf("========================================================================================\n\n");
-}
-
-/* GET UTILS */
-
-Instructor& get_instructor() {
-	Instructor ins{};
-
-	ins.id = next_instructor_id();
-	get_input_string("Enter name:", ins.name, sizeof(ins.name));
-	get_input_string("Enter surname:", ins.surname, sizeof(ins.surname));
-	ins.gender = get_input_gender();
-
-	return ins;
-}
-
-/* DELETE UTILS */
-
-void delete_instructor() {
-	int target_id = get_input_positive_int("Enter Instructor ID to delete: ");
-
-	bool is_deleted = delete_instructor_by_id(target_id);
-	if (!is_deleted) {
-		cout << "Instructor with ID " << target_id << " not found.\n";
-	}
-}
 
 /* INPUT UTILS */
 

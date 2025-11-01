@@ -126,6 +126,8 @@
     <ClCompile Include="data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="menu_instructors.cpp" />
+    <ClCompile Include="menu_istructors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
