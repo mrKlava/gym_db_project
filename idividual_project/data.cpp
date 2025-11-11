@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstring> // for strcmp
 
 #include "constants.h"
 #include "types.h"
@@ -244,6 +245,34 @@ void sort_instructors_by_id(bool asc = true) {
 			bool condition = asc
 				? (instructors[j].id > instructors[j + 1].id)
 				: (instructors[j].id < instructors[j + 1].id);
+
+			if (condition) {
+				Instructor temp = instructors[j];
+				instructors[j] = instructors[j + 1];
+				instructors[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void sort_instructors_by_name(bool asc = true) {
+	for (int i = 0; i < instructor_count - 1; i++) {
+		for (int j = 0; j < instructor_count - i - 1; j++) {
+			// Combine name and surname for comparison
+			char fullname1[64];
+			char fullname2[64];
+
+			strcpy_s(fullname1, instructors[j].name);
+			strcat_s(fullname1, " ");
+			strcat_s(fullname1, instructors[j].surname);
+
+			strcpy_s(fullname2, instructors[j + 1].name);
+			strcat_s(fullname2, " ");
+			strcat_s(fullname2, instructors[j + 1].surname);
+
+			bool condition = asc
+				? (strcmp(fullname1, fullname2) > 0)
+				: (strcmp(fullname1, fullname2) < 0);
 
 			if (condition) {
 				Instructor temp = instructors[j];

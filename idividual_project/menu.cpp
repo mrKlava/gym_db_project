@@ -13,7 +13,6 @@
 using namespace std;
 
 const string MENU_OPTIONS[] = {
-	"Menu Options",
 	"Instructors",
 	"Clients",
 	"Training Sessions",
@@ -22,7 +21,7 @@ const string MENU_OPTIONS[] = {
 
 void menu() {
 	while (true) {
-		print_menu_options(MENU_OPTIONS);
+		print_menu_options("Menu Options", MENU_OPTIONS);
 
 		int choice = get_input_positive_int("Please enter your choice: ");
 
