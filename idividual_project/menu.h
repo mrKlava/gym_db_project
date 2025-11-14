@@ -18,8 +18,11 @@ void menu_trainig_sessions();
 // INPUT UTILS
 
 void get_input_string(const char* prompt, char* destination, int length);
-Gender get_input_gender();
 int get_input_positive_int(const char* prompt);
+
+Gender get_input_gender();
+Date get_input_date(const char* prompt);
+
 
 // PRINTING UTILS
 template <size_t N>

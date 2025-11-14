@@ -12,4 +12,7 @@ const char FILE_TEMP[] = "temp.csv";
 // all instructor entries
 const char FILE_INSTRUCTORS[] = "instructors.csv";
 
+// all client entries
+const char FILE_CLIENTS[] = "clients.csv";
+
 #endif

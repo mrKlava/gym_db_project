@@ -63,4 +63,9 @@ extern int instructor_count;
 extern int instructor_last_id;
 extern int next_id_instructor;
 
+extern Client clients[];
+extern int client_count;
+extern int client_last_id;
+extern int next_id_client;
+
 #endif

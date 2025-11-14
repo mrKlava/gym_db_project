@@ -126,12 +126,15 @@
     <ClCompile Include="data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="menu_clients.cpp" />
     <ClCompile Include="menu_instructors.cpp" />
     <ClCompile Include="menu_istructors.h" />
+    <ClCompile Include="menu_sessions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="data.h" />
+    <ClInclude Include="menu_clients.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="menu.h" />
   </ItemGroup>

@@ -9,6 +9,7 @@
 
 #include "menu.h"
 #include "menu_istructors.h"
+#include "menu_clients.h"
 
 using namespace std;
 
@@ -45,41 +46,6 @@ void menu() {
 }
 
 /* MENU UTILS */
-
-void menu_clients() {
-	while (true) {
-		cout << endl;
-		cout << "=============================" << endl;
-		cout << "Client Menu:" << endl;
-		cout << "-----------------------------" << endl;
-		cout << "1. View All" << endl;
-		cout << "2. Add New" << endl;
-		cout << "3. Delete" << endl;
-		cout << "4. Back to Main Menu" << endl;
-		cout << "=============================" << endl;
-		cout << "Please enter your choice: ";
-
-		int choice;
-		cin >> choice;
-
-		switch (choice) {
-		case 1:
-			cout << "Viewing Instructors" << endl;
-			break;
-		case 2:
-			cout << "Adding Instructor" << endl;
-			break;
-
-		case 3:
-			cout << "Deleting Instructor" << endl;
-			break;
-		case 4:
-			return;
-		default:
-			cout << "Invalid choice. Please try again." << endl;
-		}
-	}
-}
 
 void menu_trainig_sessions() {
 	while (true) {
@@ -191,3 +157,61 @@ int get_input_positive_int(const char* prompt) {
 		}
 	}
 }
+
+bool is_leap(int year) {
+	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+int days_in_month(int year, int month) {
+	switch (month) {
+	case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+		return 31;
+	case 4: case 6: case 9: case 11:
+		return 30;
+	case 2:
+		return is_leap(year) ? 29 : 28;
+	default:
+		return 0;
+	}
+}
+
+Date get_input_date(const char* prompt) {
+	Date date;
+
+	while (true) {
+		cout << prompt << " (YYYY-MM-DD): ";
+
+		string input;
+		if (cin.peek() == '\n') cin.ignore();
+		getline(cin, input);
+
+		int year, month, day;
+
+		// Parse format
+		if (sscanf_s(input.c_str(), "%d-%d-%d", &year, &month, &day) != 3) {
+			cout << "Invalid date format. Please use YYYY-MM-DD.\n";
+			continue;
+		}
+
+		// Validate ranges
+		if (month < 1 || month > 12) {
+			cout << "Invalid month. Must be 1-12.\n";
+			continue;
+		}
+
+		int max_day = days_in_month(year, month);
+		if (day < 1 || day > max_day) {
+			cout << "Invalid day. Month " << month << " has " << max_day << " days.\n";
+			continue;
+		}
+
+		// Assign if all checks passed
+		date.year = year;
+		date.month = (Month)month;
+		date.day = day;
+
+		return date;
+	}
+}
+
+
