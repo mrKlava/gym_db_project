@@ -15,4 +15,7 @@ const char FILE_INSTRUCTORS[] = "instructors.csv";
 // all client entries
 const char FILE_CLIENTS[] = "clients.csv";
 
+// all client entries
+const char FILE_SESSIONS[] = "training_sessions.csv";
+
 #endif

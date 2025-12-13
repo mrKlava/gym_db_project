@@ -135,6 +135,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="data.h" />
     <ClInclude Include="menu_clients.h" />
+    <ClInclude Include="menu_sessions.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="menu.h" />
   </ItemGroup>

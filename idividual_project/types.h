@@ -68,4 +68,9 @@ extern int client_count;
 extern int client_last_id;
 extern int next_id_client;
 
+extern TrainingSession sessions[];
+extern int session_count;
+extern int session_last_id;
+extern int session_next_id;
+
 #endif

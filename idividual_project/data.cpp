@@ -11,23 +11,26 @@
 using namespace std;
 
 /* Instructors */
-Instructor instructors[MAX_RECORDS];
 int instructor_count = 0;
 int instructor_last_id = 0;
+Instructor instructors[MAX_RECORDS];
 
 /* Clients */
-Client clients[MAX_RECORDS];
 int client_count = 0;
 int client_last_id = 0;
+Client clients[MAX_RECORDS];
 
 /* Sessions */
-// TODO: implement training sessions data storage
+int session_count = 0;
+int session_last_id = 0;
+TrainingSession sessions[MAX_RECORDS];
 
 
 bool load_data() {
 	load_ids();
 	load_instructors();
 	load_clients();
+	load_sessions();
 
 	return true;
 }
@@ -56,62 +59,11 @@ bool load_ids() {
 		if (key == "client_id") {
 			client_last_id = atoi(value.c_str());
 		}
+		if (key == "session_id") {
+			session_last_id = atoi(value.c_str());
+		}
 	}
 	f.close();
-	return true;
-}
-
-bool load_instructors() {
-	ifstream f(FILE_INSTRUCTORS);
-
-	if (!f.is_open()) {
-		cerr << "Error: Could not open file " << FILE_INSTRUCTORS << endl;
-		return false;
-	}
-
-	string line;
-
-	instructor_count = 0;
-
-	while (getline(f, line)) {
-		if (line.empty()) continue;
-
-		stringstream ss(line);
-
-		string token;
-
-		Instructor ins{};
-
-		// handle id 
-		if (!getline(ss, token, ',')) continue;
-		ins.id = atoi(token.c_str());
-
-		// handle name
-		if (!getline(ss, token, ',')) continue;
-		strncpy_s(ins.name, token.c_str(), sizeof(ins.name) - 1);
-
-		// handle surname
-		if (!getline(ss, token, ',')) continue;
-		strncpy_s(ins.surname, token.c_str(), sizeof(ins.surname) - 1);
-
-		// handle gender
-		if (!getline(ss, token, ',')) continue;
-		if (token == "1") {
-			ins.gender = M;
-		}
-		else if (token == "2") {
-			ins.gender = F;
-		}
-
-		instructors[instructor_count] = ins;
-
-		instructor_count++;
-	}
-
-	cout << "Loaded " << instructor_count << " instructors from " << FILE_INSTRUCTORS << endl;
-
-	f.close();
-
 	return true;
 }
 
@@ -183,6 +135,144 @@ bool load_clients() {
 	return true;
 }
 
+bool load_instructors() {
+	ifstream f(FILE_INSTRUCTORS);
+
+	if (!f.is_open()) {
+		cerr << "Error: Could not open file " << FILE_INSTRUCTORS << endl;
+		return false;
+	}
+
+	string line;
+
+	instructor_count = 0;
+
+	while (getline(f, line)) {
+		if (line.empty()) continue;
+
+		stringstream ss(line);
+
+		string token;
+
+		Instructor ins{};
+
+		// handle id 
+		if (!getline(ss, token, ',')) continue;
+		ins.id = atoi(token.c_str());
+
+		// handle name
+		if (!getline(ss, token, ',')) continue;
+		strncpy_s(ins.name, token.c_str(), sizeof(ins.name) - 1);
+
+		// handle surname
+		if (!getline(ss, token, ',')) continue;
+		strncpy_s(ins.surname, token.c_str(), sizeof(ins.surname) - 1);
+
+		// handle gender
+		if (!getline(ss, token, ',')) continue;
+		if (token == "1") {
+			ins.gender = M;
+		}
+		else if (token == "2") {
+			ins.gender = F;
+		}
+
+		instructors[instructor_count] = ins;
+
+		instructor_count++;
+	}
+
+	cout << "Loaded " << instructor_count << " instructors from " << FILE_INSTRUCTORS << endl;
+
+	f.close();
+
+	return true;
+}
+
+bool load_sessions() {
+	ifstream f(FILE_SESSIONS);
+
+	if (!f.is_open()) {
+		cerr << "Error: Could not open file " << FILE_SESSIONS << endl;
+		return false;
+	}
+
+	string line;
+
+	session_count = 0;
+
+	while (getline(f, line)) {
+		if (line.empty()) continue;
+
+		stringstream ss(line);
+		string token;
+
+		TrainingSession session{};
+
+		// 1) ID
+		if (!getline(ss, token, ',')) continue;
+		session.id = atoi(token.c_str());
+
+		// 2) instructor_id
+		if (!getline(ss, token, ',')) continue;
+		session.instructor_id = atoi(token.c_str());
+
+		// 3) client_id
+		if (!getline(ss, token, ',')) continue;
+		session.client_id = atoi(token.c_str());
+
+		// 4) start datetime "YYYY-MM-DD HH:MM:SS"
+		if (!getline(ss, token, ',')) continue;
+		{
+			int y, m, d, hh, mm, ss_;
+			if (sscanf_s(token.c_str(), "%d-%d-%d %d:%d:%d",
+				&y, &m, &d, &hh, &mm, &ss_) != 6)
+			{
+				cerr << "Warning: Invalid start datetime for session ID "
+					<< session.id << endl;
+				continue;
+			}
+			session.start.date.year = y;
+			session.start.date.month = (Month)m;
+			session.start.date.day = d;
+			session.start.time.hour = hh;
+			session.start.time.minute = mm;
+		}
+
+		// 5) end datetime
+		if (!getline(ss, token, ',')) continue;
+		{
+			int y, m, d, hh, mm, ss_;
+			if (sscanf_s(token.c_str(), "%d-%d-%d %d:%d:%d",
+				&y, &m, &d, &hh, &mm, &ss_) != 6)
+			{
+				cerr << "Warning: Invalid end datetime for session ID "
+					<< session.id << endl;
+				continue;
+			}
+			session.end.date.year = y;
+			session.end.date.month = (Month)m;
+			session.end.date.day = d;
+			session.end.time.hour = hh;
+			session.end.time.minute = mm;
+		}
+
+		// 6) price
+		if (!getline(ss, token, ',')) continue;
+		session.price = atof(token.c_str());
+
+		// Store in array
+		sessions[session_count] = session;
+		session_count++;
+	}
+
+	cout << "Loaded " << session_count << " Training Sessions from " << FILE_SESSIONS << endl;
+
+	f.close();
+
+	return true;
+}
+
 /* ADD UTILS */
 
 bool add_instructor(const Instructor& ins) {
@@ -235,6 +325,34 @@ bool add_client(const Client& client) {
 
 	clients[client_count] = client;
 	client_count++;
+	return true;
+}
+
+bool add_session(const TrainingSession& session) {
+	if (session_count >= MAX_RECORDS) {
+		cerr << "Error: Maximum number of sessions reached." << endl;
+		return false;
+	}
+	// Append to file
+	ofstream file(FILE_SESSIONS, ios::app); // append mode
+	if (!file.is_open()) {
+		cerr << "Error: Could not open file " << FILE_SESSIONS << " for writing." << endl;
+		return false;
+	}
+	// Write record in CSV format
+	file << session.id << ","
+		<< session.instructor_id << ","
+		<< session.client_id << ","
+		<< session.start.date.year << "-" << session.start.date.month << "-" << session.start.date.day << " "
+		<< session.start.time.hour << ":" << session.start.time.minute << ":00" << ","
+		<< session.end.date.year << "-" << session.end.date.month << "-" << session.end.date.day << " "
+		<< session.end.time.hour << ":" << session.end.time.minute << ":00" << ","
+		<< session.price << "\n";
+	file.close();
+
+	sessions[session_count] = session;
+	session_count++;
+
 	return true;
 }
 
@@ -305,6 +423,51 @@ int next_client_id() {
 			string key = line.substr(0, pos);
 			if (key == "client_id") {
 				new_content += "client_id=" + to_string(new_id) + "\n";
+
+				found = true;
+			}
+			else {
+				new_content += line + "\n";
+			}
+		}
+		else {
+			new_content += line + "\n";
+		}
+	}
+	infile.close();
+
+	ofstream outfile(FILE_CONFIG, ios::trunc);
+	if (!outfile.is_open()) {
+		cerr << "Error: Cannot open config file for writing: " << FILE_CONFIG << endl;
+		return new_id;
+	}
+
+	outfile << new_content;
+	outfile.close();
+
+	return new_id;
+}
+
+int next_session_id() {
+	int new_id = ++session_last_id;
+
+	ifstream infile(FILE_CONFIG);
+	if (!infile.is_open()) {
+		cerr << "Error: Cannot open config file for reading: " << FILE_CONFIG << endl;
+		return new_id;
+	}
+
+	string line;
+	string new_content;
+	bool found = false;
+
+
+	while (getline(infile, line)) {
+		size_t pos = line.find('=');
+		if (pos != string::npos) {
+			string key = line.substr(0, pos);
+			if (key == "session_id") {
+				new_content += "session_id=" + to_string(new_id) + "\n";
 
 				found = true;
 			}
@@ -434,8 +597,106 @@ bool delete_client_by_id(int target_id) {
 	return deleted;
 }
 
+bool delete_session_by_id(int target_id) {
+	bool deleted = false;
+
+	ifstream in(FILE_SESSIONS);
+	ofstream temp(FILE_TEMP);
+	if (!in.is_open() || !temp.is_open()) {
+		cerr << "Error: cannot open file(s)." << endl;
+		return deleted;
+	}
+
+	string line;
+
+	while (getline(in, line)) {
+		if (line.empty()) continue;
+
+		size_t pos = line.find(',');
+		if (pos == string::npos) {
+			temp << line << "\n"; // keep malformed line
+			continue;
+		}
+
+		int id = stoi(line.substr(0, pos));
+		if (id != target_id) {
+			temp << line << "\n"; // keep everything except target
+		}
+		else {
+			deleted = true;
+		}
+	}
+
+	in.close();
+	temp.close();
+
+	// replace original file
+	remove(FILE_SESSIONS);
+	rename(FILE_TEMP, FILE_SESSIONS);
+
+	// clear or remove temp file (to ensure no leftovers)
+	remove(FILE_TEMP);
+
+	if (deleted)
+		cout << "Session with ID " << target_id << " deleted successfully.\n";
+	else
+		cout << "Session with ID " << target_id << " not found.\n";
+
+	// reload data
+	load_sessions();
+
+	return deleted;
+}
 
 /* SORT UTILS */
+
+// clients
+
+void sort_clients_by_id(bool asc = true) {
+	for (int i = 0; i < client_count - 1; i++) {
+		for (int j = 0; j < client_count - i - 1; j++) {
+			bool condition = asc
+				? (clients[j].id > clients[j + 1].id)
+				: (clients[j].id < clients[j + 1].id);
+
+			if (condition) {
+				Client temp = clients[j];
+				clients[j] = clients[j + 1];
+				clients[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void sort_clients_by_name(bool asc = true) {
+	for (int i = 0; i < client_count - 1; i++) {
+		for (int j = 0; j < client_count - i - 1; j++) {
+			// Combine name and surname for comparison
+			char fullname1[64];
+			char fullname2[64];
+
+			strcpy_s(fullname1, clients[j].name);
+			strcat_s(fullname1, " ");
+			strcat_s(fullname1, clients[j].surname);
+
+			strcpy_s(fullname2, clients[j + 1].name);
+			strcat_s(fullname2, " ");
+			strcat_s(fullname2, clients[j + 1].surname);
+
+			bool condition = asc
+				? (strcmp(fullname1, fullname2) > 0)
+				: (strcmp(fullname1, fullname2) < 0);
+
+			if (condition) {
+				Client temp = clients[j];
+				clients[j] = clients[j + 1];
+				clients[j + 1] = temp;
+			}
+		}
+	}
+}
+
+// instructors
 
 void sort_instructors_by_id(bool asc = true) {
 	for (int i = 0; i < instructor_count - 1; i++) {
@@ -481,46 +742,129 @@ void sort_instructors_by_name(bool asc = true) {
 	}
 }
 
-void sort_clients_by_id(bool asc = true) {
-	for (int i = 0; i < client_count - 1; i++) {
-		for (int j = 0; j < client_count - i - 1; j++) {
-			bool condition = asc
-				? (clients[j].id > clients[j + 1].id)
-				: (clients[j].id < clients[j + 1].id);
+// sessions
 
+void sort_sessions_by_id(bool asc = true) {
+	for (int i = 0; i < session_count - 1; i++) {
+		for (int j = 0; j < session_count - i - 1; j++) {
+			bool condition = asc
+				? (sessions[j].id > sessions[j + 1].id)
+				: (sessions[j].id < sessions[j + 1].id);
 			if (condition) {
-				Client temp = clients[j];
-				clients[j] = clients[j + 1];
-				clients[j + 1] = temp;
+				TrainingSession temp = sessions[j];
+				sessions[j] = sessions[j + 1];
+				sessions[j + 1] = temp;
 			}
 		}
 	}
 }
 
-void sort_clients_by_name(bool asc = true) {
-	for (int i = 0; i < client_count - 1; i++) {
-		for (int j = 0; j < client_count - i - 1; j++) {
-			// Combine name and surname for comparison
-			char fullname1[64];
-			char fullname2[64];
-
-			strcpy_s(fullname1, clients[j].name);
-			strcat_s(fullname1, " ");
-			strcat_s(fullname1, clients[j].surname);
-
-			strcpy_s(fullname2, clients[j + 1].name);
-			strcat_s(fullname2, " ");
-			strcat_s(fullname2, clients[j + 1].surname);
-
+void sort_sessions_by_client_id(bool asc = true) {
+	for (int i = 0; i < session_count - 1; i++) {
+		for (int j = 0; j < session_count - i - 1; j++) {
 			bool condition = asc
-				? (strcmp(fullname1, fullname2) > 0)
-				: (strcmp(fullname1, fullname2) < 0);
-
+				? (sessions[j].client_id > sessions[j + 1].client_id)
+				: (sessions[j].client_id < sessions[j + 1].client_id);
 			if (condition) {
-				Client temp = clients[j];
-				clients[j] = clients[j + 1];
-				clients[j + 1] = temp;
+				TrainingSession temp = sessions[j];
+				sessions[j] = sessions[j + 1];
+				sessions[j + 1] = temp;
 			}
 		}
 	}
+}
+
+void sort_sessions_by_instructor_id(bool asc = true) {
+	for (int i = 0; i < session_count - 1; i++) {
+		for (int j = 0; j < session_count - i - 1; j++) {
+			bool condition = asc
+				? (sessions[j].instructor_id > sessions[j + 1].instructor_id)
+				: (sessions[j].instructor_id < sessions[j + 1].instructor_id);
+			if (condition) {
+				TrainingSession temp = sessions[j];
+				sessions[j] = sessions[j + 1];
+				sessions[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void sort_sessions_by_price(bool asc = true) {
+	for (int i = 0; i < session_count - 1; i++) {
+		for (int j = 0; j < session_count - i - 1; j++) {
+			bool condition = asc
+				? (sessions[j].price > sessions[j + 1].price)
+				: (sessions[j].price < sessions[j + 1].price);
+			if (condition) {
+				TrainingSession temp = sessions[j];
+				sessions[j] = sessions[j + 1];
+				sessions[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void sort_sessions_by_start_datetime(bool asc = true) {
+	for (int i = 0; i < session_count - 1; i++) {
+		for (int j = 0; j < session_count - i - 1; j++) {
+			bool condition = asc
+				? (compare_datetimes(sessions[j].start, sessions[j + 1].start) > 0)
+				: (compare_datetimes(sessions[j].start, sessions[j + 1].start) < 0);
+			if (condition) {
+				TrainingSession temp = sessions[j];
+				sessions[j] = sessions[j + 1];
+				sessions[j + 1] = temp;
+			}
+		}
+	}
+}
+
+/* UTILS */
+
+int compare_datetimes(const DateTime& a, const DateTime& b) {
+	// Compare year
+	if (a.date.year != b.date.year)
+		return a.date.year - b.date.year;
+
+	// Compare month
+	if (a.date.month != b.date.month)
+		return (int)a.date.month - (int)b.date.month;
+
+	// Compare day
+	if (a.date.day != b.date.day)
+		return a.date.day - b.date.day;
+
+	// Compare hour
+	if (a.time.hour != b.time.hour)
+		return a.time.hour - b.time.hour;
+
+	// Compare minute
+	if (a.time.minute != b.time.minute)
+		return a.time.minute - b.time.minute;
+
+	// Equal
+	return 0;
+}
+
+bool is_end_after_start(const DateTime& start, const DateTime& end) {
+	return compare_datetimes(end, start) > 0;
+}
+
+bool is_client_exists(int client_id) {
+	for (int i = 0; i < client_count; i++) {
+		if (clients[i].id == client_id) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool is_instructor_exists(int instructor_id) {
+	for (int i = 0; i < instructor_count; i++) {
+		if (instructors[i].id == instructor_id) {
+			return true;
+		}
+	}
+	return false;
 }

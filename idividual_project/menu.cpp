@@ -1,4 +1,4 @@
-#include <cstdio>
+﻿#include <cstdio>
 #include <cstring>  // for strcpy, strlen
 #include <iostream>
 #include <limits>   // for numeric_limits
@@ -10,9 +10,11 @@
 #include "menu.h"
 #include "menu_istructors.h"
 #include "menu_clients.h"
+#include "menu_sessions.h"
 
 using namespace std;
 
+const string MENU_TITLE = "Main Menu";
 const string MENU_OPTIONS[] = {
 	"Instructors",
 	"Clients",
@@ -22,7 +24,7 @@ const string MENU_OPTIONS[] = {
 
 void menu() {
 	while (true) {
-		print_menu_options("Menu Options", MENU_OPTIONS);
+		print_menu_options(MENU_TITLE, MENU_OPTIONS);
 
 		int choice = get_input_positive_int("Please enter your choice: ");
 
@@ -34,7 +36,7 @@ void menu() {
 			menu_clients();
 			break;
 		case 3:
-			menu_trainig_sessions();
+			menu_sessions();
 			break;
 		case 4:
 			cout << "Exiting the program." << endl;
@@ -46,41 +48,6 @@ void menu() {
 }
 
 /* MENU UTILS */
-
-void menu_trainig_sessions() {
-	while (true) {
-		cout << endl;
-		cout << "=============================" << endl;
-		cout << "Client Menu:" << endl;
-		cout << "-----------------------------" << endl;
-		cout << "1. View All" << endl;
-		cout << "2. Add New" << endl;
-		cout << "3. Delete" << endl;
-		cout << "4. Back to Main Menu" << endl;
-		cout << "=============================" << endl;
-		cout << "Please enter your choice: ";
-
-		int choice;
-		cin >> choice;
-
-		switch (choice) {
-		case 1:
-			cout << "Viewing Training Sessions" << endl;
-			break;
-		case 2:
-			cout << "Adding Training Session" << endl;
-			break;
-
-		case 3:
-			cout << "Deleting Training Session" << endl;
-			break;
-		case 4:
-			return;
-		default:
-			cout << "Invalid choice. Please try again." << endl;
-		}
-	}
-}
 
 
 /* INPUT UTILS */
@@ -158,6 +125,23 @@ int get_input_positive_int(const char* prompt) {
 	}
 }
 
+double get_input_positive_double(const char* prompt) {
+	double value;
+	while (true) {
+		cout << prompt;
+		cin >> value;
+		if (cin.fail() || value <= 0.0) {
+			cin.clear();              // clear error flag
+			cin.ignore(10000, '\n');  // discard invalid input
+			cout << "Please enter a positive number.\n";
+		}
+		else {
+			cin.ignore(10000, '\n');  // discard remaining input
+			return value;
+		}
+	}
+}
+
 bool is_leap(int year) {
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
@@ -187,25 +171,23 @@ Date get_input_date(const char* prompt) {
 
 		int year, month, day;
 
-		// Parse format
 		if (sscanf_s(input.c_str(), "%d-%d-%d", &year, &month, &day) != 3) {
 			cout << "Invalid date format. Please use YYYY-MM-DD.\n";
 			continue;
 		}
 
-		// Validate ranges
 		if (month < 1 || month > 12) {
-			cout << "Invalid month. Must be 1-12.\n";
+			cout << "Invalid month. Must be 1–12.\n";
 			continue;
 		}
 
 		int max_day = days_in_month(year, month);
 		if (day < 1 || day > max_day) {
-			cout << "Invalid day. Month " << month << " has " << max_day << " days.\n";
+			cout << "Invalid day. Month " << month
+				<< " has " << max_day << " days.\n";
 			continue;
 		}
 
-		// Assign if all checks passed
 		date.year = year;
 		date.month = (Month)month;
 		date.day = day;
@@ -214,4 +196,75 @@ Date get_input_date(const char* prompt) {
 	}
 }
 
+Time get_input_time(const char* prompt) {
+	Time t;
 
+	while (true) {
+		cout << prompt << " (HH:MM): ";
+
+		string input;
+		if (cin.peek() == '\n') cin.ignore();
+		getline(cin, input);
+
+		int hour, minute;
+
+		if (sscanf_s(input.c_str(), "%d:%d", &hour, &minute) != 2) {
+			cout << "Invalid time format. Please use HH:MM.\n";
+			continue;
+		}
+
+		if (hour < 0 || hour > 23) {
+			cout << "Invalid hour (0–23).\n";
+			continue;
+		}
+
+		if (minute < 0 || minute > 59) {
+			cout << "Invalid minute (0–59).\n";
+			continue;
+		}
+
+		t.hour = hour;
+		t.minute = minute;
+
+		return t;
+	}
+}
+
+DateTime get_input_datetime(const char* prompt) {
+	cout << prompt << endl;
+
+	DateTime dt;
+
+	dt.date = get_input_date("Enter date");
+	dt.time = get_input_time("Enter time");
+
+	return dt;
+}
+
+int get_input_existing_instructor_id(const char* prompt) {
+	int id;
+
+	while (true) {
+		id = get_input_positive_int(prompt);
+
+		if (is_instructor_exists(id)) {
+			return id;
+		}
+
+		cout << "Instructor with ID " << id << " does not exist. Please try again.\n";
+	}
+}
+
+int get_input_existing_client_id(const char* prompt) {
+	int id;
+
+	while (true) {
+		id = get_input_positive_int(prompt);
+
+		if (is_client_exists(id)) {
+			return id;
+		}
+
+		cout << "Client with ID " << id << " does not exist. Please try again.\n";
+	}
+}
