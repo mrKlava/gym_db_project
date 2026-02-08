@@ -100,9 +100,8 @@ bool load_clients() {
 		if (!getline(ss, token, ',')) continue;
 		strncpy_s(client.surname, token.c_str(), sizeof(client.surname) - 1);
 
-		// ---- DOB (YYYY-MM-DD) ----
+		// handle dob (YYYY-MM-DD)
 		if (!getline(ss, token, ',')) continue;
-		// Format: 1985-06-15
 		int year, month, day;
 		if (sscanf_s(token.c_str(), "%d-%d-%d", &year, &month, &day) == 3) {
 			client.dob.year = year;
@@ -858,7 +857,6 @@ bool is_client_exists(int client_id) {
 	}
 	return false;
 }
-
 
 bool is_instructor_exists(int instructor_id) {
 	for (int i = 0; i < instructor_count; i++) {

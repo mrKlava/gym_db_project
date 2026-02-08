@@ -8,11 +8,14 @@
 
 #include "types.h"
 #include "data.h"
+#include "utils_input.h"
 
 #include "menu.h"
 #include "menu_istructors.h"
 
 using namespace std;
+
+const string MENU_ORIGIN = "Instructors";
 
 const string MENU_OPTIONS[] = {
 	"View",
@@ -52,16 +55,16 @@ const string MENU_SEARCH_OPTIONS[] = {
 
 void menu_istructors() {
 	while (true) {
-		print_menu_options("Instructors Menu", MENU_OPTIONS);
+		print_menu_options(MENU_TITLE + MENU_ORIGIN, MENU_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			menu_view_instructors();
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			menu_add_insrtuctors();
 			break;
 		}
@@ -71,7 +74,7 @@ void menu_istructors() {
 		case 4:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -82,36 +85,33 @@ void menu_istructors() {
 
 void menu_view_instructors() {
 	while (true) {
-		print_menu_options("View Instructors Menu", MENU_VIEW_OPTIONS);
+		print_menu_options(MENU_VIEW_TITLE + MENU_ORIGIN, MENU_VIEW_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_instructors_by_id(true);
 			print_table_instructors();
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			menu_sort_id_instructors();
 
 			break;
 		}
-		case 3:
-		{
+		case 3: {
 			menu_sort_name_instructors();
 
 			break;
 		}
-		case 4:
-		{
+		case 4: {
 			menu_filter_gender_instructors();
 
 			break;
 		}
-		case 5:
-		{
+		case 5: {
 			menu_search_instructors();
 
 			break;
@@ -119,7 +119,7 @@ void menu_view_instructors() {
 		case 6:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -128,17 +128,17 @@ void menu_view_instructors() {
 
 void menu_sort_id_instructors() {
 	while (true) {
-		print_menu_options("Sort by ID Instructors Menu", MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_TITLE + TEXT_INSTRUCTOR_ID, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_instructors_by_id(true);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_instructors_by_id(false);
 
 			break;
@@ -146,7 +146,7 @@ void menu_sort_id_instructors() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 
 		print_table_instructors();
@@ -157,17 +157,17 @@ void menu_sort_id_instructors() {
 
 void menu_sort_name_instructors() {
 	while (true) {
-		print_menu_options("Sort by Name Instructors Menu", MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_TITLE + TEXT_INSTRUCTOR_NAME, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_instructors_by_name(true);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_instructors_by_name(false);
 
 			break;
@@ -175,7 +175,7 @@ void menu_sort_name_instructors() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 
 		print_table_instructors();
@@ -186,17 +186,18 @@ void menu_sort_name_instructors() {
 
 void menu_filter_gender_instructors() {
 	while (true) {
-		print_menu_options("Filter by Gender Instructors Menu", MENU_FILTER_OPTIONS);
+		print_menu_options(MENU_FILTER_TITLE + TEXT_INSTUCTOR_GENDER, MENU_FILTER_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			print_table_instructors_by_gender(M);
 
 			break;
-		case 2:
-		{
+		}
+
+		case 2: {
 			print_table_instructors_by_gender(F);
 
 			break;
@@ -204,7 +205,7 @@ void menu_filter_gender_instructors() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -213,21 +214,18 @@ void menu_filter_gender_instructors() {
 
 void menu_search_instructors() {
 	while (true) {
-		print_menu_options("Search Instructors Menu", MENU_SEARCH_OPTIONS);
+		print_menu_options(MENU_SEARCH_TITLE + MENU_ORIGIN, MENU_SEARCH_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
-		{
-			int id = get_input_positive_int("Please enter ID: ");
+		case 1: {
+			int id = get_input_positive_int(INPUT_PROVIDE_ID);
 			print_search_instructors_by_id(id);
 
 			break;
 		}
-		case 2:
-		{
-
+		case 2: {
 			print_search_instructors_by_name();
 
 			break;
@@ -235,7 +233,7 @@ void menu_search_instructors() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -254,11 +252,11 @@ void menu_add_insrtuctors() {
 /* DELETE UTILS */
 
 void menu_delete_istructors() {
-	int target_id = get_input_positive_int("Enter Instructor ID to delete: ");
+	int target_id = get_input_positive_int(INPUT_PROVIDE_ID);
 
 	bool is_deleted = delete_instructor_by_id(target_id);
 	if (!is_deleted) {
-		cout << "Instructor with ID " << target_id << " not found.\n";
+		cout << INPUT_NOT_FOUND << TEXT_INSTRUCTOR_ID << endl;
 	}
 }
 
@@ -397,19 +395,3 @@ void print_search_instructors_by_name() {
 
 	cout << line_sep_b << endl;
 }
-
-/* HELPERS */
-
-Instructor get_instructor() {
-	Instructor ins{};
-
-	ins.id = next_instructor_id();
-	get_input_string("Enter name:", ins.name, sizeof(ins.name));
-	get_input_string("Enter surname:", ins.surname, sizeof(ins.surname));
-	ins.gender = get_input_gender();
-
-	return ins;
-}
-
-
-

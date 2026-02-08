@@ -8,16 +8,15 @@
 
 #include "types.h"
 #include "data.h"
+#include "utils_input.h"
 
 #include "menu.h"
 #include "menu_clients.h"
 
 using namespace std;
 
-const string INPUT_CHOICE_PROMPT = "Please enter your choice: ";
-const string INPUT_INVALID_CHOICE_MSG = "Invalid choice. Please try again.";
+const string MENU_ORIGIN = "Clients";
 
-const string MENU_TITLE = "Clients Menu";
 const string MENU_OPTIONS[] = {
 	"View",
 	"Add New",
@@ -25,7 +24,6 @@ const string MENU_OPTIONS[] = {
 	"Back to Main Menu"
 };
 
-const string MENU_VIEW_TITLE = "View Clients Menu";
 const string MENU_VIEW_OPTIONS[] = {
 	"View All",
 	"Sort by ID",
@@ -35,21 +33,18 @@ const string MENU_VIEW_OPTIONS[] = {
 	"Back"
 };
 
-const string MENU_SORT_TITLE = "Sort Clients Menu";
 const string MENU_SORT_OPTIONS[] = {
 	"Ascending",
 	"Descending",
 	"Back"
 };
 
-const string MENU_FILTER_TITLE = "Filter by Gender Clients Menu";
 const string MENU_FILTER_OPTIONS[] = {
 	"Male",
 	"Female",
 	"Back"
 };
 
-const string MENU_SEARCH_TITLE = "Search Clients Menu";
 const string MENU_SEARCH_OPTIONS[] = {
 	"ID",
 	"Name",
@@ -58,28 +53,33 @@ const string MENU_SEARCH_OPTIONS[] = {
 
 /* MAIN MENU */
 
-void menu_clients () {
+void menu_clients() {
 	while (true) {
-		print_menu_options(MENU_TITLE, MENU_OPTIONS);
+		print_menu_options(MENU_TITLE + MENU_ORIGIN, MENU_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			menu_view_clients();
-			break;
-		case 2:
-		{
-			menu_add_clients();
+
 			break;
 		}
-		case 3:
-			menu_delete_clients();
+		case 2:{
+			menu_add_clients();
+
 			break;
-		case 4:
+		}
+		case 3: {
+			menu_delete_clients();
+
+			break;
+		}
+		case 4: 
 			return;
-		default:
-			cout << "Invalid choice. Please try again." << endl;
+		
+		default: 
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -90,24 +90,23 @@ void menu_clients () {
 
 void menu_view_clients() {
 	while (true) {
-		print_menu_options(MENU_VIEW_TITLE, MENU_VIEW_OPTIONS);
+		print_menu_options(MENU_VIEW_TITLE + MENU_ORIGIN, MENU_VIEW_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_clients_by_id(true);
 			print_table_clients();
-
+		
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			menu_sort_id_clients();
 
 			break;
 		}
-		case 3:
-		{
+		case 3: {
 			menu_sort_name_clients();
 
 			break;
@@ -127,7 +126,7 @@ void menu_view_clients() {
 		case 6:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -136,9 +135,9 @@ void menu_view_clients() {
 
 void menu_sort_id_clients() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_CLIENT_ID, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
 		case 1:
@@ -154,7 +153,7 @@ void menu_sort_id_clients() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 
 		print_table_clients();
@@ -165,15 +164,16 @@ void menu_sort_id_clients() {
 
 void menu_sort_name_clients() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_CLIENT_NAME, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_clients_by_name(true);
 
 			break;
+		}
 		case 2:
 		{
 			sort_clients_by_name(false);
@@ -183,7 +183,7 @@ void menu_sort_name_clients() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 
 		print_table_clients();
@@ -194,17 +194,17 @@ void menu_sort_name_clients() {
 
 void menu_filter_gender_clients() {
 	while (true) {
-		print_menu_options(MENU_FILTER_TITLE, MENU_FILTER_OPTIONS);
+		print_menu_options(MENU_FILTER_TITLE + TEXT_CLIENT_GENDER, MENU_FILTER_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			print_table_clients_by_gender(M);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			print_table_clients_by_gender(F);
 
 			break;
@@ -212,7 +212,7 @@ void menu_filter_gender_clients() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -221,21 +221,18 @@ void menu_filter_gender_clients() {
 
 void menu_search_clients() {
 	while (true) {
-		print_menu_options(MENU_SEARCH_TITLE, MENU_SEARCH_OPTIONS);
+		print_menu_options(MENU_SEARCH_TITLE + MENU_ORIGIN, MENU_SEARCH_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
-		{
-			int id = get_input_positive_int("Please enter ID: ");
+		case 1: {
+			int id = get_input_positive_int(INPUT_PROVIDE_ID);
 			print_search_clients_by_id(id);
 
 			break;
 		}
-		case 2:
-		{
-
+		case 2: {
 			print_search_clients_by_name();
 
 			break;
@@ -243,7 +240,7 @@ void menu_search_clients() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -262,11 +259,11 @@ void menu_add_clients() {
 /* DELETE UTILS */
 
 void menu_delete_clients() {
-	int target_id = get_input_positive_int("Enter Client ID to delete: ");
+	int target_id = get_input_positive_int(INPUT_PROVIDE_ID);
 
 	bool is_deleted = delete_client_by_id(target_id);
 	if (!is_deleted) {
-		cout << "Client with ID " << target_id << " not found.\n";
+		cout << INPUT_NOT_FOUND << TEXT_CLIENT_ID << target_id << endl;
 	}
 }
 
@@ -444,20 +441,3 @@ void print_search_clients_by_name() {
 
 	cout << line_sep_b << endl;
 }
-
-/* HELPERS */
-
-Client get_client() {
-	Client client{};
-
-	client.id = next_client_id();
-	get_input_string("Enter name:", client.name, sizeof(client.name));
-	get_input_string("Enter surname:", client.surname, sizeof(client.surname));
-	client.dob = get_input_date("Enter date of birth: ");
-	client.gender = get_input_gender();
-
-	return client;
-}
-
-
-

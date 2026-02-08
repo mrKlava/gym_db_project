@@ -8,11 +8,13 @@
 
 #include "types.h"
 #include "data.h"
+#include "utils_input.h"
 
 #include "menu.h"
 #include "menu_sessions.h"
 
-const string MENU_TITLE = "Training Session Menu";
+const string MENU_ORIGIN = "Training Sessions";
+
 const string MENU_OPTIONS[] = {
 	"View",
 	"Add New",
@@ -20,7 +22,6 @@ const string MENU_OPTIONS[] = {
 	"Back to Main Menu"
 };
 
-const string MENU_VIEW_TITLE = "View Training Session Menu";
 const string MENU_VIEW_OPTIONS[] = {
 	"View All",
 	"Sort by ID",
@@ -33,21 +34,18 @@ const string MENU_VIEW_OPTIONS[] = {
 	"Back"
 };
 
-const string MENU_SORT_TITLE = "Sort Training Sessions Menu";
 const string MENU_SORT_OPTIONS[] = {
 	"Ascending",
 	"Descending",
 	"Back"
 };
 
-const string MENU_FILTER_TITLE = "Filter Training Sessions Menu";
 const string MENU_FILTER_OPTIONS[] = {
 	"Client",
 	"Instructor",
 	"Back"
 };
 
-const string MENU_SEARCH_TITLE = "Search Training Sessions Menu";
 const string MENU_SEARCH_OPTIONS[] = {
 	"ID",
 	"Back"
@@ -57,9 +55,9 @@ const string MENU_SEARCH_OPTIONS[] = {
 
 void menu_sessions() {
 	while (true) {
-		print_menu_options(MENU_TITLE, MENU_OPTIONS);
+		print_menu_options(MENU_TITLE + MENU_ORIGIN, MENU_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
 		case 1: {
@@ -80,7 +78,7 @@ void menu_sessions() {
 		case 4:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 	}
 }
@@ -89,54 +87,48 @@ void menu_sessions() {
 
 void menu_view_sessions() {
 	while (true) {
-		print_menu_options(MENU_VIEW_TITLE, MENU_VIEW_OPTIONS);
+		print_menu_options(MENU_VIEW_TITLE + MENU_ORIGIN, MENU_VIEW_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
-			//sort_session_by_id(true);
+		case 1: {
+			sort_sessions_by_id(true);
 			print_table_sessions();
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			menu_sort_id_sessions();
 
 			break;
 		}
-		case 3:
-		{
+		case 3: {
 			menu_sort_client_sessions();
 
 			break;
 		}
-		case 4:
-		{
+		case 4: {
 			menu_sort_instructor_sessions();
 
 			break;
 		}
-		case 5:
-		{
+		case 5: {
 			menu_sort_price_sessions();
 
 			break;
 		}
-		case 6:
-		{
+		case 6: {
 			menu_sort_date_sessions();
 
 			break;
 		}
-		case 7:
-		{
+		case 7: {
 			menu_filter_sessions();
 
 			break;
 		}
-		case 8:
-		{
+		case 8: {
 			menu_search_sessions();
 
 			break;
@@ -144,7 +136,7 @@ void menu_view_sessions() {
 		case 9:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 	}
 
@@ -153,17 +145,17 @@ void menu_view_sessions() {
 
 void menu_sort_id_sessions() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_SESSION_ID, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_sessions_by_id(true);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_sessions_by_id(false);
 
 			break;
@@ -171,7 +163,7 @@ void menu_sort_id_sessions() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 
 		print_table_sessions();
@@ -182,17 +174,17 @@ void menu_sort_id_sessions() {
 
 void menu_sort_client_sessions() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_CLIENT_ID, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_sessions_by_client_id(true);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_sessions_by_client_id(false);
 
 			break;
@@ -200,7 +192,7 @@ void menu_sort_client_sessions() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 
 		print_table_sessions();
@@ -211,17 +203,17 @@ void menu_sort_client_sessions() {
 
 void menu_sort_instructor_sessions() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_INSTRUCTOR_ID, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE );
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_sessions_by_instructor_id(true);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_sessions_by_instructor_id(false);
 
 			break;
@@ -229,7 +221,7 @@ void menu_sort_instructor_sessions() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 
 		print_table_sessions();
@@ -240,17 +232,17 @@ void menu_sort_instructor_sessions() {
 
 void menu_sort_price_sessions() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_SESSION_PRICE, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_sessions_by_price(true);
-
+		
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_sessions_by_price(false);
 
 			break;
@@ -258,7 +250,7 @@ void menu_sort_price_sessions() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 
 		print_table_sessions();
@@ -269,17 +261,17 @@ void menu_sort_price_sessions() {
 
 void menu_sort_date_sessions() {
 	while (true) {
-		print_menu_options(MENU_SORT_TITLE, MENU_SORT_OPTIONS);
+		print_menu_options(MENU_SORT_BY_TITLE + TEXT_SESSION_DATE, MENU_SORT_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
-		case 1:
+		case 1: {
 			sort_sessions_by_start_datetime(true);
 
 			break;
-		case 2:
-		{
+		}
+		case 2: {
 			sort_sessions_by_start_datetime(false);
 
 			break;
@@ -287,7 +279,7 @@ void menu_sort_date_sessions() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 
 		print_table_sessions();
@@ -298,21 +290,20 @@ void menu_sort_date_sessions() {
 
 void menu_filter_sessions() {
 	while (true) {
-		print_menu_options(MENU_FILTER_TITLE, MENU_FILTER_OPTIONS);
+		print_menu_options(MENU_FILTER_TITLE + MENU_ORIGIN, MENU_FILTER_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
 		case 1: {
-			int client_id = get_input_positive_int("Enter Client ID to filter: ");
+			int client_id = get_input_positive_int(INPUT_PROVIDE_ID);
 
 			print_table_sessions_by_client(client_id);
 
 			break;
 		}
-		case 2:
-		{
-			int instructor_id = get_input_positive_int("Enter Instructor ID to filter: ");
+		case 2: {
+			int instructor_id = get_input_positive_int(INPUT_PROVIDE_ID);
 
 			print_table_sessions_by_instructor(instructor_id);
 
@@ -321,7 +312,7 @@ void menu_filter_sessions() {
 		case 3:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_PROVIDE_ID << endl;
 		}
 	}
 
@@ -330,14 +321,14 @@ void menu_filter_sessions() {
 
 void menu_search_sessions() {
 	while (true) {
-		print_menu_options(MENU_SEARCH_TITLE, MENU_SEARCH_OPTIONS);
+		print_menu_options(MENU_SEARCH_TITLE + MENU_ORIGIN, MENU_SEARCH_OPTIONS);
 
-		int choice = get_input_positive_int("Please enter your choice: ");
+		int choice = get_input_positive_int(INPUT_PROVIDE_CHOICE);
 
 		switch (choice) {
 		case 1:
 		{
-			int id = get_input_positive_int("Please enter ID: ");
+			int id = get_input_positive_int(INPUT_PROVIDE_ID);
 			print_search_session_by_id(id);
 
 			break;
@@ -345,7 +336,7 @@ void menu_search_sessions() {
 		case 2:
 			return;
 		default:
-			cout << "Invalid choice. Please try again." << endl;
+			cout << INPUT_INVALID_CHOICE_MSG << endl;
 		}
 	}
 
@@ -364,11 +355,11 @@ void menu_add_session() {
 /* DELETE UTILS */
 
 void menu_delete_sessions() {
-	int target_id = get_input_positive_int("Enter Session ID to delete: ");
+	int target_id = get_input_positive_int(INPUT_PROVIDE_ID);
 
 	bool is_deleted = delete_session_by_id(target_id);
 	if (!is_deleted) {
-		cout << "Session with ID " << target_id << " not found.\n";
+		cout << INPUT_NOT_FOUND << TEXT_CLIENT_ID << target_id << endl;
 	}
 }
 
@@ -582,35 +573,4 @@ void print_search_session_by_id(int id) {
 	printf("%-5d | %-12d | %-12d | %-8.2f | %-20s | %-20s\n",
 		found->id, found->instructor_id, found->client_id, found->price, start_str, end_str);
 	cout << line_sep_b << endl;
-}
-
-/* HELPERS */
-
-TrainingSession get_session() {
-	TrainingSession session{};
-
-	// assign next available ID
-	session.id = next_session_id();
-
-	// get existing instructor and client
-	session.instructor_id = get_input_existing_instructor_id("Enter Instructor ID: ");
-	session.client_id = get_input_existing_client_id("Enter Client ID: ");
-
-	// get price
-	session.price = get_input_positive_double("Enter Price: ");
-
-	// get start and end datetime
-	session.start = get_input_datetime("Enter Start DateTime: ");
-	// validate end datetime is after start datetime
-	while (true) {
-		session.end = get_input_datetime("Enter End DateTime:");
-
-		if (is_end_after_start(session.start, session.end)) {
-			break;
-		}
-
-		cout << "Error: End of the Training Session must be AFTER Start (Date time)" << endl;
-	}
-
-	return session;
 }

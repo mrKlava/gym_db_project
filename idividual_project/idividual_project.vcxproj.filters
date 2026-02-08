@@ -13,18 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\data">
-      <UniqueIdentifier>{81883a7f-c866-42a7-8887-bb45da18619b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\menu">
       <UniqueIdentifier>{bbe1ac9a-db13-4b65-bcf3-f6186c493a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{8624d00e-85b8-4b16-9dc3-018f2bd87701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\storage">
+      <UniqueIdentifier>{81883a7f-c866-42a7-8887-bb45da18619b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\data">
+      <UniqueIdentifier>{4be14a29-83b3-47d2-8f4a-ceed2144a8dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="menu_istructors.h">
@@ -41,6 +44,12 @@
     </ClCompile>
     <ClCompile Include="menu_sessions.cpp">
       <Filter>Source Files\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="utils_input.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="data.cpp">
+      <Filter>Source Files\data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,19 +71,22 @@
     <ClInclude Include="menu_sessions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="utils_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="instructors.csv">
-      <Filter>Source Files\data</Filter>
+      <Filter>Source Files\storage</Filter>
     </None>
     <None Include="clients.csv">
-      <Filter>Source Files\data</Filter>
+      <Filter>Source Files\storage</Filter>
     </None>
     <None Include="training_sessions.csv">
-      <Filter>Source Files\data</Filter>
+      <Filter>Source Files\storage</Filter>
     </None>
     <None Include="config.dat">
-      <Filter>Source Files\data</Filter>
+      <Filter>Source Files\storage</Filter>
     </None>
   </ItemGroup>
 </Project>

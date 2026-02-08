@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="data.cpp" />
+    <ClCompile Include="utils_input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="menu_clients.cpp" />
@@ -134,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="data.h" />
+    <ClInclude Include="utils_input.h" />
     <ClInclude Include="menu_clients.h" />
     <ClInclude Include="menu_sessions.h" />
     <ClInclude Include="types.h" />
